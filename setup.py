@@ -19,14 +19,14 @@ from os.path import abspath, dirname, join
 from setuptools import setup, find_packages
 from sys import path as sys_path
 
-deps = ["construct"]
+deps = ["construct~=2.10.67"]
 
 srcdir = join(dirname(abspath(__file__)), "src/")
 sys_path.insert(0, srcdir)
 
 setup(
     name="pymp4",
-    version="1.2.0",
+    version="1.3.1",
     description="A Python parser for MP4 boxes",
     url="https://github.com/beardypig/pymp4",
     author="beardypig",
