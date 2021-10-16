@@ -34,7 +34,7 @@ class BoxTests(unittest.TestCase):
             ),
             Container(
                 offset=0,
-                type=u"tenc",
+                type="tenc",
                 box_body=Container(
                     type=b"tenc",
                     version=0,

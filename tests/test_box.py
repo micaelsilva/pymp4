@@ -32,7 +32,7 @@ class BoxTests(unittest.TestCase):
             Box.parse(b"\x00\x00\x00\x18ftypiso5\x00\x00\x00\x01iso5avc1"),
             Container(
                 offset=0,
-                type=u"ftyp",
+                type="ftyp",
                 box_body=Container(
                     type=b"ftyp",
                     major_brand="iso5",
@@ -66,7 +66,7 @@ class BoxTests(unittest.TestCase):
             ),
             Container(
                 offset=0,
-                type=u"mdhd",
+                type="mdhd",
                 box_body=Container(
                     type=b"mdhd",
                     version=0,
@@ -75,7 +75,7 @@ class BoxTests(unittest.TestCase):
                     modification_time=0,
                     timescale=1000000,
                     duration=0,
-                    language=Container(code=u"und"),
+                    language=Container(code="und"),
                 ),
                 end=32,
             ),
@@ -91,7 +91,7 @@ class BoxTests(unittest.TestCase):
                     modification_time=0,
                     timescale=1000000,
                     duration=0,
-                    language=dict(code=u"und"),
+                    language=dict(code="und"),
                 ),
             )
         )
@@ -111,7 +111,7 @@ class BoxTests(unittest.TestCase):
                     modification_time=0,
                     timescale=1000000,
                     duration=0,
-                    language=dict(code=u"und"),
+                    language=dict(code="und"),
                 ),
             )
         )
@@ -178,7 +178,7 @@ class BoxTests(unittest.TestCase):
             Box.parse(in_bytes + b"padding"),
             Container(
                 offset=0,
-                type=u"smhd",
+                type="smhd",
                 box_body=Container(type=b"smhd", version=0, flags=0, balance=0, reserved=0),
                 end=len(in_bytes),
             ),
@@ -199,7 +199,7 @@ class BoxTests(unittest.TestCase):
             Box.parse(in_bytes + b"padding"),
             Container(
                 offset=0,
-                type=u"stsd",
+                type="stsd",
                 box_body=Container(
                     type=b"stsd",
                     version=0,
@@ -207,7 +207,7 @@ class BoxTests(unittest.TestCase):
                     entries=ListContainer(
                         [
                             Container(
-                                format=u"tx3g",
+                                format="tx3g",
                                 data_reference_index=1,
                                 sample_entry_box=Container(data=tx3g_data),
                             )

@@ -1,7 +1,7 @@
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
 
-# Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,linux,python
-# Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,linux,python
+# Created by https://www.toptal.com/developers/gitignore/api/python,linux
+# Edit at https://www.toptal.com/developers/gitignore?templates=python,linux
 
 ### Linux ###
 *~
@@ -158,22 +158,16 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-### VisualStudioCode ###
+# End of https://www.toptal.com/developers/gitignore/api/python,linux
+
+# Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
+
+# VSCode
 .vscode/*
-# !.vscode/settings.json
-# !.vscode/tasks.json
-# !.vscode/launch.json
-# !.vscode/extensions.json
 *.code-workspace
-
-# Local History for Visual Studio Code
 .history/
-
-### VisualStudioCode Patch ###
-# Ignore all local history of files
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,linux,python
-
-# Custom rules (everything added below won't be overriden by 'Generate .gitignore File' if you use 'Update' option)
+# PyInstaller
+!./*.spec
