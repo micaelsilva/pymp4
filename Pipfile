@@ -1,0 +1,15 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+black = "==21.9b0"
+flake8 = "~=4.0.0"
+isort = "~=5.9.0"
+
+[packages]
+pymp4 = {editable = true, path = "."}
+
+[requires]
+python_version = "3"

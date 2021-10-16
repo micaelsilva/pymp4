@@ -15,14 +15,14 @@
    limitations under the License.
 """
 
-from os.path import abspath, dirname, join
-from setuptools import setup, find_packages
-from sys import path as sys_path
+import sys
+from pathlib import Path
+
+from setuptools import find_packages, setup
+
+sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 deps = ["construct~=2.10.67"]
-
-srcdir = join(dirname(abspath(__file__)), "src/")
-sys_path.insert(0, srcdir)
 
 setup(
     name="pymp4",
@@ -34,18 +34,20 @@ setup(
     license="Apache 2.0",
     packages=find_packages("src"),
     package_dir={"": "src"},
+    python_requires=">=3.6",
     entry_points={"console_scripts": ["mp4dump=pymp4.cli:dump"]},
     install_requires=deps,
     test_suite="tests",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",
-        "Operating System :: POSIX",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3 :: Only",
         "Topic :: Multimedia :: Sound/Audio",
         "Topic :: Multimedia :: Video",
         "Topic :: Utilities",
