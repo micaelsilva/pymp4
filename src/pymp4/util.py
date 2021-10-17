@@ -23,11 +23,11 @@ from pymp4.exceptions import BoxNotFound
 log = logging.getLogger(__name__)
 
 
-class BoxUtil(object):
+class BoxUtil:
     @classmethod
     def first(cls, box, type_):
-        if hasattr(box, "children"):
-            for sbox in box.children:
+        if hasattr(box.box_body, "children"):
+            for sbox in box.box_body.children:
                 try:
                     return cls.first(sbox, type_)
                 except BoxNotFound:
@@ -36,12 +36,12 @@ class BoxUtil(object):
         elif box.type == type_:
             return box
 
-        raise BoxNotFound("could not find box of type: {}".format(type_))
+        raise BoxNotFound(f"could not find box of type: {type_}")
 
     @classmethod
     def index(cls, box, type_):
-        if hasattr(box, "children"):
-            for i, box in enumerate(box.children):
+        if hasattr(box.box_body, "children"):
+            for i, box in enumerate(box.box_body.children):
                 if box.type == type_:
                     return i
 
@@ -49,21 +49,16 @@ class BoxUtil(object):
     def find(cls, box, type_):
         if box.type == type_:
             yield box
-        elif hasattr(box, "children"):
-            for sbox in box.children:
+        elif hasattr(box.box_body, "children"):
+            for sbox in box.box_body.children:
                 for fbox in cls.find(sbox, type_):
                     yield fbox
 
     @classmethod
     def find_extended(cls, box, extended_type_):
-        if hasattr(box, "extended_type"):
-            if box.extended_type == extended_type_:
-                yield box
-            elif hasattr(box, "children"):
-                for sbox in box.children:
-                    for fbox in cls.find_extended(sbox, extended_type_):
-                        yield fbox
-        elif hasattr(box, "children"):
-            for sbox in box.children:
+        if hasattr(box.box_body, "extended_type") and box.box_body.extended_type == extended_type_:
+            yield box
+        elif hasattr(box.box_body, "children"):
+            for sbox in box.box_body.children:
                 for fbox in cls.find_extended(sbox, extended_type_):
                     yield fbox
