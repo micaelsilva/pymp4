@@ -26,7 +26,7 @@ deps = ["construct~=2.10.67"]
 
 setup(
     name="pymp4",
-    version="1.4.3",
+    version="1.4.4",
     description="A Python parser for MP4 boxes",
     url="https://github.com/beardypig/pymp4",
     author="beardypig",

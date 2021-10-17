@@ -23,7 +23,6 @@ from construct import (
     Array,
     BitsInteger,
     BitStruct,
-    Byte,
     Bytes,
     Const,
     CString,
@@ -750,21 +749,11 @@ ProtectionSystemHeaderBox = Struct(
 
 TrackEncryptionBox = Struct(
     "type" / If(this._.type != "uuid", Const(b"tenc")),
-    "version" / Default(Int8ub, 0),
-    "flags" / Default(Int24ub, 0),
-    "_reserved0" / Const(0, Int8ub),
-    "_reserved1" / Const(0, Int8ub),
-    "is_encrypted" / Int8ub,
+    "version" / Const(Int8ub, 0),
+    "flags" / Const(Int24ub, 0),
+    "is_encrypted" / Int24ub,
     "iv_size" / Int8ub,
     "key_ID" / UUIDBytes(Bytes(16)),
-    "constant_iv"
-    / Default(
-        If(
-            this.is_encrypted and this.iv_size == 0,
-            PrefixedArray(Int8ub, Byte),
-        ),
-        None,
-    ),
 )
 
 SampleEncryptionBox = Struct(
