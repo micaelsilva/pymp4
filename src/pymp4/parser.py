@@ -745,7 +745,7 @@ ProtectionSystemHeaderBox = Struct(
     "flags" / Const(0, Int24ub),
     "system_ID" / UUIDBytes(Bytes(16)),
     "key_IDs" / Default(If(this.version == 1, PrefixedArray(Int32ub, UUIDBytes(Bytes(16)))), None),
-    "init_data" / Prefixed(Int32ub, GreedyBytes, includelength=True),
+    "init_data" / Prefixed(Int32ub, GreedyBytes),
 )
 
 TrackEncryptionBox = Struct(
