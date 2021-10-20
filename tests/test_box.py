@@ -31,15 +31,14 @@ class BoxTests(unittest.TestCase):
         self.assertEqual(
             Box.parse(b"\x00\x00\x00\x18ftypiso5\x00\x00\x00\x01iso5avc1"),
             Container(
-                offset=0,
-                type="ftyp",
+                type=b"ftyp",
                 box_body=Container(
                     type=b"ftyp",
-                    major_brand="iso5",
+                    major_brand=b"iso5",
                     minor_version=1,
-                    compatible_brands=ListContainer(["iso5", "avc1"]),
+                    compatible_brands=ListContainer([b"iso5", b"avc1"]),
                 ),
-                end=24,
+                length=24,
             ),
         )
 
@@ -47,12 +46,12 @@ class BoxTests(unittest.TestCase):
         self.assertEqual(
             Box.build(
                 dict(
-                    type="ftyp",
+                    type=b"ftyp",
                     box_body=dict(
                         type=b"ftyp",
-                        major_brand="iso5",
+                        major_brand=b"iso5",
                         minor_version=1,
-                        compatible_brands=["iso5", "avc1"],
+                        compatible_brands=[b"iso5", b"avc1"],
                     ),
                 )
             ),
@@ -65,8 +64,7 @@ class BoxTests(unittest.TestCase):
                 b"\x00\x00\x00\x20mdhd\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0fB@\x00\x00\x00\x00U\xc4\x00\x00"
             ),
             Container(
-                offset=0,
-                type="mdhd",
+                type=b"mdhd",
                 box_body=Container(
                     type=b"mdhd",
                     version=0,
@@ -75,23 +73,23 @@ class BoxTests(unittest.TestCase):
                     modification_time=0,
                     timescale=1000000,
                     duration=0,
-                    language=Container(code="und"),
+                    language=Container(language="und"),
                 ),
-                end=32,
+                length=32,
             ),
         )
 
     def test_mdhd_build(self):
         mdhd_data = Box.build(
             dict(
-                type="mdhd",
+                type=b"mdhd",
                 box_body=dict(
                     type=b"mdhd",
                     creation_time=0,
                     modification_time=0,
                     timescale=1000000,
                     duration=0,
-                    language=dict(code="und"),
+                    language=Container(language="und"),
                 ),
             )
         )
@@ -103,7 +101,7 @@ class BoxTests(unittest.TestCase):
 
         mdhd_data64 = Box.build(
             dict(
-                type="mdhd",
+                type=b"mdhd",
                 box_body=dict(
                     type=b"mdhd",
                     version=1,
@@ -111,7 +109,7 @@ class BoxTests(unittest.TestCase):
                     modification_time=0,
                     timescale=1000000,
                     duration=0,
-                    language=dict(code="und"),
+                    language=Container(language="und"),
                 ),
             )
         )
@@ -123,19 +121,19 @@ class BoxTests(unittest.TestCase):
 
     def test_moov_build(self):
         moov = Container(
-            type="moov",
+            type=b"moov",
             box_body=Container(
-                type="moov",
+                type=b"moov",
                 children=ListContainer(
                     [  # 96 bytes
                         Container(
-                            type="mvex",
+                            type=b"mvex",
                             box_body=Container(
-                                type="mvex",
+                                type=b"mvex",
                                 children=ListContainer(
                                     [  # 88 bytes
                                         Container(
-                                            type="mehd",
+                                            type=b"mehd",
                                             box_body=Container(
                                                 type=b"mehd",
                                                 version=0,
@@ -144,11 +142,11 @@ class BoxTests(unittest.TestCase):
                                             ),
                                         ),  # 16 bytes
                                         Container(
-                                            type="trex",
+                                            type=b"trex",
                                             box_body=Container(type=b"trex", track_ID=1),
                                         ),  # 32 bytes
                                         Container(
-                                            type="trex",
+                                            type=b"trex",
                                             box_body=Container(type=b"trex", track_ID=2),
                                         ),  # 32 bytes
                                     ]
@@ -177,15 +175,14 @@ class BoxTests(unittest.TestCase):
         self.assertEqual(
             Box.parse(in_bytes + b"padding"),
             Container(
-                offset=0,
-                type="smhd",
+                type=b"smhd",
                 box_body=Container(type=b"smhd", version=0, flags=0, balance=0, reserved=0),
-                end=len(in_bytes),
+                length=len(in_bytes),
             ),
         )
 
     def test_smhd_build(self):
-        smhd_data = Box.build(dict(type="smhd", box_body=dict(type=b"smhd", balance=0)))
+        smhd_data = Box.build(dict(type=b"smhd", box_body=dict(type=b"smhd", balance=0)))
         self.assertEqual(len(smhd_data), 16),
         self.assertEqual(smhd_data, b"\x00\x00\x00\x10smhd\x00\x00\x00\x00\x00\x00\x00\x00")
 
@@ -198,22 +195,22 @@ class BoxTests(unittest.TestCase):
         self.assertEqual(
             Box.parse(in_bytes + b"padding"),
             Container(
-                offset=0,
-                type="stsd",
+                type=b"stsd",
                 box_body=Container(
                     type=b"stsd",
                     version=0,
                     flags=0,
-                    entries=ListContainer(
+                    children=ListContainer(
                         [
                             Container(
-                                format="tx3g",
+                                type=b"tx3g",
                                 data_reference_index=1,
                                 sample_entry_box=Container(data=tx3g_data),
+                                children=ListContainer(),
                             )
                         ]
                     ),
                 ),
-                end=len(in_bytes),
+                length=len(in_bytes),
             ),
         )

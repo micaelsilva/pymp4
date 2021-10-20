@@ -26,8 +26,9 @@ log = logging.getLogger(__name__)
 class BoxUtil:
     @classmethod
     def first(cls, box, type_):
-        if hasattr(box.box_body, "children"):
-            for sbox in box.box_body.children:
+        box_body = getattr(box, "box_body", box)
+        if hasattr(box_body, "children"):
+            for sbox in box_body.children:
                 try:
                     return cls.first(sbox, type_)
                 except BoxNotFound:
@@ -40,25 +41,28 @@ class BoxUtil:
 
     @classmethod
     def index(cls, box, type_):
-        if hasattr(box.box_body, "children"):
-            for i, box in enumerate(box.box_body.children):
+        box_body = getattr(box, "box_body", box)
+        if hasattr(box_body, "children"):
+            for i, box in enumerate(box_body.children):
                 if box.type == type_:
                     return i
 
     @classmethod
     def find(cls, box, type_):
+        box_body = getattr(box, "box_body", box)
         if box.type == type_:
             yield box
-        elif hasattr(box.box_body, "children"):
-            for sbox in box.box_body.children:
+        elif hasattr(box_body, "children"):
+            for sbox in box_body.children:
                 for fbox in cls.find(sbox, type_):
                     yield fbox
 
     @classmethod
     def find_extended(cls, box, extended_type_):
-        if hasattr(box.box_body, "extended_type") and box.box_body.extended_type == extended_type_:
+        box_body = getattr(box, "box_body", box)
+        if hasattr(box_body, "extended_type") and box_body.extended_type == extended_type_:
             yield box
-        elif hasattr(box.box_body, "children"):
-            for sbox in box.box_body.children:
+        elif hasattr(box_body, "children"):
+            for sbox in box_body.children:
                 for fbox in cls.find_extended(sbox, extended_type_):
                     yield fbox
