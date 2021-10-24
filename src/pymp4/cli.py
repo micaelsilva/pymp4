@@ -3,12 +3,9 @@ import argparse
 import io
 import logging
 
-from construct import setglobalfullprinting
-
 from pymp4.parser import Box
 
 log = logging.getLogger(__name__)
-setglobalfullprinting(True)
 
 
 def dump():

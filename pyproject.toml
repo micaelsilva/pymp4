@@ -1,6 +1,52 @@
+[tool.poetry]
+name = "pymp4"
+version = "1.5.0"
+description = "A Python parser for MP4 boxes"
+authors = ["beardypig <git@beardypig.com>"]
+license = "Apache 2.0"
+
+readme = "README.md"
+
+packages = [
+    { include = "pymp4", from = "src" }
+]
+
+include = [
+    { path = "tests", format = "sdist" }
+]
+
+repository = "https://github.com/tooncitydl/pymp4"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Multimedia :: Sound/Audio",
+    "Topic :: Multimedia :: Video",
+    "Topic :: Utilities",
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+construct = "^2.10.67"
+
+[tool.poetry.dev-dependencies]
+black = "^21.9b0"
+flake8 = "^4.0.1"
+isort = "^5.9.3"
+
+[tool.poetry.scripts]
+mp4dump = "pymp4.cli:dump"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.black]
 line-length = 99
 # skip-string-normalization = true
 
 [tool.isort]
 profile = "black"
+known_first_party = "pymp4"
