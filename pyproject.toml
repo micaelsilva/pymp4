@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pymp4"
-version = "1.5.0"
+version = "1.5.1"
 description = "A Python parser for MP4 boxes"
 authors = ["beardypig <git@beardypig.com>"]
 license = "Apache 2.0"
