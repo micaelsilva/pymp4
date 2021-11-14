@@ -43,19 +43,23 @@ class BoxUtil:
     def index(cls, box, type_):
         box_body = getattr(box, "box_body", box)
         if hasattr(box_body, "children"):
-            for i, box in enumerate(box_body.children):
+            for index, box in enumerate(box_body.children):
                 if box.type == type_:
-                    return i
+                    return index
 
     @classmethod
-    def find(cls, box, type_):
+    def find(cls, box, type_, delete=False):
         box_body = getattr(box, "box_body", box)
         if box.type == type_:
-            yield box
+            yield box, False
         elif hasattr(box_body, "children"):
-            for sbox in box_body.children:
-                for fbox in cls.find(sbox, type_):
-                    yield fbox
+            deleted_boxes = 0
+            for index, sbox in enumerate(box_body.children.copy()):
+                for fbox, children in cls.find(sbox, type_):
+                    if delete and not children:
+                        del box_body.children[index - deleted_boxes]
+                        deleted_boxes += 1
+                    yield fbox, True
 
     @classmethod
     def find_extended(cls, box, extended_type_):
