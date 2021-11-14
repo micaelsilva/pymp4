@@ -48,14 +48,14 @@ class BoxUtil:
                     return index
 
     @classmethod
-    def find(cls, box, type_, delete=False):
+    def find(cls, box, type_, *, delete=False):
         box_body = getattr(box, "box_body", box)
         if box.type == type_:
             yield box, False
         elif hasattr(box_body, "children"):
             deleted_boxes = 0
             for index, sbox in enumerate(box_body.children.copy()):
-                for fbox, children in cls.find(sbox, type_):
+                for fbox, children in cls.find(sbox, type_, delete=delete):
                     if delete and not children:
                         del box_body.children[index - deleted_boxes]
                         deleted_boxes += 1
