@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pymp4"
-version = "1.5.1"
+version = "1.6.0"
 description = "A Python parser for MP4 boxes"
 authors = ["beardypig <git@beardypig.com>"]
 license = "Apache 2.0"
@@ -29,12 +29,12 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.7"
-construct = "^2.10.67"
+construct = "~=2.10.67"
 
 [tool.poetry.dev-dependencies]
-black = "^21.9b0"
+black = "^21.10b0"
 flake8 = "^4.0.1"
-isort = "^5.9.3"
+isort = "^5.10.1"
 
 [tool.poetry.scripts]
 mp4dump = "pymp4.cli:dump"
