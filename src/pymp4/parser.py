@@ -222,7 +222,7 @@ HandlerReferenceBox = Struct(
 VideoMediaHeaderBox = Struct(
     "type" / Const(b"vmhd"),
     "version" / Default(Int8ub, 0),
-    "flags" / Const(1, Int24ub),
+    "flags" / Default(Int24ub, 1),
     "graphics_mode" / Default(Int16ub, 0),
     "opcolor"
     / Struct(
