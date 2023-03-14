@@ -274,7 +274,7 @@ MP4ASampleEntryBox = Struct(
     "channels" / Default(Int16ub, 2),
     "bits_per_sample" / Default(Int16ub, 16),
     "compression_id" / Default(Int16sb, 0),
-    "packet_size" / Const(0, Int16ub),
+    "packet_size" / Default(Int16ub, 0),
     "sampling_rate" / Int16ub,
     Padding(2),
 )
