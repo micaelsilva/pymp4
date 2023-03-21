@@ -33,6 +33,7 @@ from construct import (
     GreedyBytes,
     GreedyRange,
     If,
+    IfThenElse,
     Int8ub,
     Int16sb,
     Int16ub,
@@ -221,7 +222,7 @@ HandlerReferenceBox = Struct(
 
 VideoMediaHeaderBox = Struct(
     "type" / Const(b"vmhd"),
-    "version" / Default(Int8ub, 0),
+    "version" / Int8ub,
     "flags" / Default(Int24ub, 1),
     "graphics_mode" / Default(Int16ub, 0),
     "opcolor"
@@ -742,6 +743,42 @@ SampleEncryptionBox = Struct(
     ),
 )
 
+SampleToGroupBox = Struct(
+    "type" / Const(b"sbgp"),
+    "version" / Int8ub,
+    "flags" / Const(0, Int24ub),
+    "grouping_type" / Bytes(4),
+    "grouping_type_parameter" / If(this.version == 1, Int32ub),
+    "entry_count" / Int32ub,
+    "entries"
+    / Array(
+       this.entry_count,
+       Struct(
+           "sample_count" / Int32ub,
+           "group_description_index" / Int32ub
+       ),
+    ),
+)
+
+SampleGroupDescriptionBox = Struct(
+     "type" / Const(b"sgpd"),
+     "version" / Int8ub,
+     "flags" / Int24ub,
+     "grouping_type" / Bytes(4),
+     "default_length" / IfThenElse(this.version == 1, Int32ub, 0),
+     "default_group_description_index" / If(this.version >= 2, Int32ub),
+     "entry_count" / Int32ub,
+     "entries"
+    / Array(
+       this.entry_count,
+       Struct(
+           "is_encrypted" / Int24ub,
+           "iv_size" / Int8ub,
+           "key_ID" / UUIDBytes(Bytes(16)),
+       ),
+    ),
+)
+
 OriginalFormatBox = Struct(
     "type" / Const(b"frma"),
     "original_format" / Default(Bytes(4), b"avc1"),
@@ -844,6 +881,8 @@ Box = Prefixed(
                 b"frma": OriginalFormatBox,
                 b"schm": SchemeTypeBox,
                 b"schi": ContainerBoxLazy,
+                b"sbgp": SampleToGroupBox,
+                b"sgpd": SampleGroupDescriptionBox,
                 # piff
                 b"uuid": UUIDBox,
                 # HDS boxes
