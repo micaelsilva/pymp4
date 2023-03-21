@@ -657,7 +657,7 @@ SampleAuxiliaryInformationSizesBox = Struct(
         "has_aux_info_type" / Flag,
     ),
     # Optional fields
-    "aux_info_type" / If(this.flags.has_aux_info_type, Int32ub),
+    "aux_info_type" / If(this.flags.has_aux_info_type, Bytes(4)),
     "aux_info_type_parameter" / If(this.flags.has_aux_info_type, Int32ub),
     "default_sample_info_size" / Int8ub,
     "sample_count" / Int32ub,
@@ -674,7 +674,7 @@ SampleAuxiliaryInformationOffsetsBox = Struct(
         "has_aux_info_type" / Flag,
     ),
     # Optional fields
-    "aux_info_type" / If(this.flags.has_aux_info_type, Int32ub),
+    "aux_info_type" / If(this.flags.has_aux_info_type, Bytes(4)),
     "aux_info_type_parameter" / If(this.flags.has_aux_info_type, Int32ub),
     # Short offsets in version 0, long in version 1
     "offsets" / PrefixedArray(Int32ub, Switch(this._.version, VERSIONS)),
