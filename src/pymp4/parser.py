@@ -305,32 +305,82 @@ AVCC = Struct(
 
 HVCC = Struct(
     "attrs"
-    / BitStruct(
-        "version" / Const(1, BitsInteger(8)),
-        "profile_space" / BitsInteger(2),
-        "general_tier_flag" / BitsInteger(1),
-        "general_profile" / BitsInteger(5),
-        "general_profile_compatibility_flags" / BitsInteger(32),
-        "general_constraint_indicator_flags" / BitsInteger(48),
-        "general_level" / BitsInteger(8),
-        Padding(4, pattern=b"\xff"),
-        "min_spatial_segmentation" / BitsInteger(12),
-        Padding(6, pattern=b"\xff"),
-        "parallelism_type" / BitsInteger(2),
-        Padding(6, pattern=b"\xff"),
-        "chroma_format" / BitsInteger(2),
-        Padding(5, pattern=b"\xff"),
-        "luma_bit_depth" / BitsInteger(3),
-        Padding(5, pattern=b"\xff"),
-        "chroma_bit_depth" / BitsInteger(3),
-        "average_frame_rate" / BitsInteger(16),
-        "constant_frame_rate" / BitsInteger(2),
-        "num_temporal_layers" / BitsInteger(3),
-        "temporal_id_nested" / BitsInteger(1),
-        "nalu_length_size" / BitsInteger(2),
+    / Struct(
+        "version" / Const(1, Int8ub),
+        "flags" / BitStruct(
+            "profile_space" / BitsInteger(2),
+            "general_tier_flag" / BitsInteger(1),
+            "general_profile" / BitsInteger(5),
+        ),
+        "general_profile_compatibility_flags" / Int32ub,
+        # 4 Bytes
+        "general_constraint_indicator_flags" / Bytes(6),
+        # 6 Bytes
+        "general_level" / Int8ub,
+        # 1 Byte
+        "min_spatial_segmentation" / BitStruct(
+            "reserved" / Bytes(4),
+            # Padding(4, pattern=b"\xff"),
+            "min_spatial_segmentation" / BitsInteger(12),
+        ),
+        # 2 Bytes
+        "parallelism_type" / BitStruct(
+            "reserved" / Bytes(6),
+            # Padding(6, pattern=b"\xff"),
+            "parallelism_type" / BitsInteger(2),
+        ),
+        # 1 Byte
+        "chroma_format_idc" / BitStruct(
+            "reserved" / Bytes(6),
+            # Padding(6, pattern=b"\xff"),
+            "chroma_format_idc" / BitsInteger(2),
+        ),
+        # 1 Byte
+        "bit_depth_luma_minus8" / BitStruct(
+            "reserved" / Bytes(5),
+            # Padding(5, pattern=b"\xff"),
+            "bit_depth_luma_minus8" / BitsInteger(3),
+        ),
+        # 1 Byte
+        "bit_depth_chroma_minus8" / BitStruct(
+            "reserved" / Bytes(5),
+            # Padding(5, pattern=b"\xff"),
+            "bit_depth_chroma_minus8" / BitsInteger(3),
+        ),
+        # 1 Byte
+        "average_frame_rate" / Int16ub,
+        # 2 Bytes
+        "nalu_flags" / BitStruct(
+            "constant_frame_rate" / BitsInteger(2),
+            "num_temporal_layers" / BitsInteger(3),
+            "temporal_id_nested" / BitsInteger(1),
+            "nalu_length_size_minus1" / BitsInteger(2),
+        ),
+        # 1 Byte
+        "num_of_arr_nalus" / Int8ub,
+        # 1 Byte
+        ###23 bytes
+        "arr_nalus"
+        / Array(
+            this.num_of_arr_nalus,
+            Struct(
+                "nalu_flags" / BitStruct(
+                    "array_completeness" / BitsInteger(1),
+                    "reserved" / BitsInteger(1),
+                    "nal_unit_type" / BitsInteger(6),
+                ),
+                "num_nalus" / Int16ub,
+                "nalus"
+                / Array(
+                    this.num_nalus,
+                    Struct(
+                        "nal_unit_length" / Int16ub,
+                        "nal_unit" / Bytes(this.nal_unit_length),
+                    ),
+                ),
+            ),
+        ),
     ),
-    # TODO: parse NALUs
-    "raw_bytes" / GreedyBytes,
 )
 
 PixelAspectRatioBox = Struct("hSpacing" / Int32ub, "vSpacing" / Int32ub)
@@ -384,6 +434,7 @@ SampleEntryBox = Prefixed(
                 b"ec-3": MP4ASampleEntryBox,
                 b"mp4a": MP4ASampleEntryBox,
                 b"enca": MP4ASampleEntryBox,
+                b"hvc1": AVC1SampleEntryBox,
                 b"avc1": AVC1SampleEntryBox,
                 b"encv": AVC1SampleEntryBox,
             },
