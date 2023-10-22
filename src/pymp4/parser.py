@@ -445,6 +445,7 @@ SampleEntryBox = Prefixed(
             this.type,
             {   
                 b"ec-3": MP4ASampleEntryBox,
+                b"ac-3": MP4ASampleEntryBox,
                 b"mp4a": MP4ASampleEntryBox,
                 b"enca": MP4ASampleEntryBox,
                 b"hvc1": AVC1SampleEntryBox,
