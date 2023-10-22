@@ -280,6 +280,19 @@ MP4ASampleEntryBox = Struct(
     Padding(2),
 )
 
+AC3SpecificBox = Struct(
+    "type" / Const(b"dac3"),
+    "flags" / BitStruct(
+        "fscod" / BitsInteger(2),
+        "bsid" / BitsInteger(5),
+        "bsmod" / BitsInteger(3),
+        "acmod" / BitsInteger(3),
+        "lfeon" / BitsInteger(1),
+        "bit_rate_code" / BitsInteger(5),
+        "reserved" / BitsInteger(5),
+    )
+)
+
 
 class MaskedInteger(Adapter):
     def _decode(self, obj, context, path):
@@ -430,7 +443,7 @@ SampleEntryBox = Prefixed(
         "sample_entry_box"
         / Switch(
             this.type,
-            {
+            {   
                 b"ec-3": MP4ASampleEntryBox,
                 b"mp4a": MP4ASampleEntryBox,
                 b"enca": MP4ASampleEntryBox,
@@ -924,6 +937,7 @@ Box = Prefixed(
                 b"saiz": SampleAuxiliaryInformationSizesBox,
                 b"saio": SampleAuxiliaryInformationOffsetsBox,
                 b"btrt": BitRateBox,
+                b"dac3": AC3SpecificBox,
                 # dash
                 b"tenc": TrackEncryptionBox,
                 b"pssh": ProtectionSystemHeaderBox,
