@@ -53,6 +53,7 @@ from construct import (
     Subconstruct,
     Switch,
     this,
+    Optional
 )
 from construct.lib import int2byte
 
@@ -798,6 +799,7 @@ SampleEncryptionBox = Struct(
         Int32ub,
         Struct(
             "iv" / Bytes(8),
+            Optional(Const(b'\x00\x00\x00\x00\x00\x00\x00\x00')),
             # include the sub sample encryption information
             "subsample_encryption_info"
             / If(
