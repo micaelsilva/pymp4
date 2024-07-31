@@ -52,8 +52,7 @@ from construct import (
     Struct,
     Subconstruct,
     Switch,
-    this,
-    Optional
+    this
 )
 from construct.lib import int2byte
 
@@ -799,7 +798,9 @@ SampleEncryptionBox = Struct(
         Int32ub,
         Struct(
             "iv" / Bytes(8),
-            Optional(Const(b'\x00\x00\x00\x00\x00\x00\x00\x00')),
+            # create a peek object to try to identify if the IV is 8 or 16 bytes
+            "peek" / Peek(Bytes(8)),
+            "iv2" / If(lambda ctx: ctx.peek == b"\x00\x00\x00\x00\x00\x00\x00\x00", Bytes(8)),
             # include the sub sample encryption information
             "subsample_encryption_info"
             / If(
